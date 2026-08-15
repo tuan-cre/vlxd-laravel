@@ -1,0 +1,26 @@
+/* Theme variables & small helpers for VLXD Di Hiền */
+:root{
+  /* Light blue theme */
+  --primary-color: #6ec6ff; /* soft sky blue */
+  --primary-variant: #8dd7ff; /* softer */
+  --primary-strong: #2196f3; /* stronger */
+  --primary-dark: #1565c0; /* deep blue */
+  --primary-rgb: 110,198,255;
+  --primary-strong-rgb: 33,150,243;
+
+  /* Bootstrap primary mapping */
+  --bs-primary: var(--primary-color);
+}
+
+/* Gradient utility */
+.gradient-primary { background: linear-gradient(135deg, rgba(var(--primary-rgb),0.95) 0%, rgba(var(--primary-strong-rgb),0.95) 100%); }
+.gradient-primary-soft { background: linear-gradient(135deg, rgba(var(--primary-rgb),0.05) 0%, rgba(var(--primary-strong-rgb),0.05) 100%); }
+.gradient-primary-strong { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-strong) 100%); }
+
+/* Minimal helpers for quick color uses */
+.text-primary { color: var(--primary-color) !important; }
+.bg-primary { background-color: var(--primary-color) !important; }
+.btn-primary-custom { background: var(--primary-color); border-color: var(--primary-strong); color: #fff; }
+
+/* Small shadow helper tuned for primary */
+.box-shadow-primary { box-shadow: 0 8px 25px rgba(var(--primary-rgb), 0.18); }

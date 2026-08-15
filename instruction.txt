@@ -1,0 +1,61 @@
+HƯỚNG DẪN NGẮN CHO KHÁCH HÀNG - MUA SẮM TRÊN WEBSITE VLXD
+
+1) Duyệt và tìm sản phẩm
+- Vào "Sản phẩm" hoặc trang chủ để xem danh sách, dùng bộ lọc/nhóm danh mục.
+- Dùng ô tìm kiếm để tìm theo tên/miêu tả.
+- File tham khảo: public/product/group.php, model/sanpham.php
+
+2) Xem chi tiết sản phẩm
+- Mở trang chi tiết để xem mô tả, hình ảnh, giá, tồn kho và đánh giá.
+- Từ trang này bạn có thể thêm sản phẩm vào giỏ hàng.
+- File tham khảo: public/product/detail.php
+
+3) Giỏ hàng
+- Xem giỏ tại "Giỏ hàng": kiểm tra số lượng, sửa/xóa mặt hàng, xem tổng tiền.
+- File tham khảo: public/cart/cart.php
+
+4) Thanh toán (Checkout)
+- Điền thông tin (email, họ tên, điện thoại, địa chỉ giao hàng).
+- Nếu đã đăng nhập, hệ thống tự điền thông tin và cho phép chọn địa chỉ có sẵn.
+- Sau gửi đơn, bạn sẽ được chuyển tới trang thông báo đơn hàng thành công.
+- File tham khảo: public/cart/checkout.php, public/cart/message.php
+
+5) Đăng ký / Đăng nhập
+- Khuyến nghị: tạo tài khoản để quản lý đơn hàng, điểm thưởng và địa chỉ.
+- Email là thông tin bắt buộc. (Hệ thống kiểm tra email tồn tại)
+- File tham khảo: public/account/registerform.php, model/nguoidung.php
+
+6) Quản lý tài khoản
+- Vào "Tài khoản" (sau đăng nhập) để:
+  - Xem/đổi thông tin cá nhân.
+  - Xem danh sách đơn hàng (status, chi tiết).
+  - Quản lý sổ địa chỉ giao hàng và đặt địa chỉ mặc định.
+  - Xem/đổi mật khẩu.
+- File tham khảo: public/account/account.php, public/account/addresses.php, public/account/orders.php
+- Model liên quan: [`CUSTOMER::layDanhSachDiaChi`](model/customer.php), [`CUSTOMER::layThongTinKhachHang`](model/customer.php)
+
+7) Điểm thưởng & Mã giảm giá
+- Kiểm tra điểm thưởng trên trang "Điểm" và dùng mã giảm nếu có.
+- Một số mã cần đổi điểm/thuộc quyền khách hàng nhất định.
+- File tham khảo: public/account/points.php, model/coupon.php (nếu cần)
+
+8) Bảng giá (PDF)
+- Vào "Bảng giá" để xem/tải PDF bảng giá mới nhất.
+- Trang hiển thị PDF trong iframe và có nút tải xuống.
+- File tham khảo: public/price_sheets/index.php, public/price_sheets/detail.php, model/price_sheet.php
+
+9) Hỗ trợ & Tin tức
+- Dùng trang "Liên hệ" để gửi tin nhắn tới shop.
+- Đọc mục "Tin tức" để cập nhật mẹo sản phẩm và khuyến mãi.
+- File tham khảo: public/contact/contact.php, public/news/news.php
+
+10) Lưu ý vận chuyển & trạng thái đơn
+- Sau khi đặt, theo dõi trạng thái đơn trong "Đơn hàng của tôi".
+- Thông tin giao hàng căn bản (fullname, phone, address) được lưu trong đơn ngay tại thời điểm đặt.
+- File tham khảo: public/account/orders.php, admin/order/detail.php (tham khảo cách hiển thị)
+
+KẾT:
+- Luồng cơ bản: Tìm sản phẩm -> Thêm vào giỏ -> Thanh toán -> Nhận thông báo -> Kiểm tra đơn trong "Tài khoản".
+- Đăng ký/đăng nhập giúp quản lý thông tin, địa chỉ, đơn và điểm dễ dàng hơn.
+
+Hết.

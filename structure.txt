@@ -1,0 +1,353 @@
+.
+├── admin
+│   ├── auth
+│   │   ├── changepass.php
+│   │   ├── index.php
+│   │   ├── login.php
+│   │   ├── main.php
+│   │   └── profile.php
+│   ├── category
+│   │   ├── addform.php
+│   │   ├── index.php
+│   │   ├── main.php
+│   │   └── updateform.php
+│   ├── coupon
+│   │   ├── addform.php
+│   │   ├── index.php
+│   │   ├── main.php
+│   │   └── updateform.php
+│   ├── customer
+│   │   ├── detail.php
+│   │   ├── index.php
+│   │   └── main.php
+│   ├── dashboard
+│   │   ├── index.php
+│   │   └── main.php
+│   ├── debug
+│   ├── employee
+│   │   ├── addform.php
+│   │   ├── index.php
+│   │   ├── main.php
+│   │   └── updateform.php
+│   ├── inc
+│   │   ├── bottom.php
+│   │   ├── css
+│   │   │   ├── app.css
+│   │   │   └── app.css.map
+│   │   ├── js
+│   │   │   ├── app.js
+│   │   │   └── app.js.map
+│   │   └── top.php
+│   ├── index.php
+│   ├── news
+│   │   ├── addform.php
+│   │   ├── detail.php
+│   │   ├── index.php
+│   │   ├── main.php
+│   │   └── updateform.php
+│   ├── nhapkho
+│   │   ├── addform.php
+│   │   ├── detail.php
+│   │   ├── index.php
+│   │   └── main.php
+│   ├── order
+│   │   ├── detail.php
+│   │   ├── index.php
+│   │   └── main.php
+│   ├── price_sheets
+│   │   ├── addform.php
+│   │   ├── detail.php
+│   │   ├── index.php
+│   │   ├── main.php
+│   │   └── updateform.php
+│   ├── product
+│   │   ├── addform.php
+│   │   ├── detail.php
+│   │   ├── index.php
+│   │   ├── main.php
+│   │   └── updateform.php
+│   ├── revenue
+│   │   ├── index.php
+│   │   └── main.php
+│   ├── site_info
+│   │   ├── index.php
+│   │   └── main.php
+│   ├── user
+│   │   ├── addform.php
+│   │   ├── index.php
+│   │   ├── main.php
+│   │   └── updateform.php
+│   └── warehouse
+│       ├── addform.php
+│       ├── index.php
+│       ├── main.php
+│       └── updateform.php
+├── api
+│   └── chatbot.php
+├── composer.json
+├── composer.lock
+├── config
+│   ├── coze.example.php
+│   ├── coze.php
+│   ├── mail.example.php
+│   ├── mail.php
+│   └── site_info.json
+├── data
+│   ├── migrate_add_coupon_points_and_minlevel.php
+│   ├── migrate_add_employee_phone.php
+│   ├── migrate_add_order_stock_applied.php
+│   ├── migrate_create_customer_coupons.php
+│   ├── migrate_create_order_inventory.php
+│   ├── migrate_drop_employee_code.php
+│   ├── migrate_ensure_bronze_points_coupon.php
+│   ├── migrate_fix_coupon_values.php
+│   ├── populate_inventory_from_products.php
+│   ├── recalculate_products_stock.php
+│   ├── run_migrations_and_fixes.php
+│   ├── test_insert_product.php
+│   └── vlxd.sql
+├── documents
+│   ├── pricesheet_oct2025.pdf
+│   └── pricesheet_sep2025.pdf
+├── images
+│   ├── auth
+│   │   ├── brick.jpeg
+│   │   ├── login-regis.jpg
+│   │   └── wall.jpeg
+│   ├── banners
+│   │   ├── ban.jpg
+│   │   ├── banner.jpg
+│   │   ├── building.jpeg
+│   │   ├── building.jpg
+│   │   └── bulding.avif
+│   ├── carousel
+│   │   ├── badge.jpeg
+│   │   ├── h1.jpg
+│   │   ├── h2.jpg
+│   │   └── h3.jpg
+│   ├── categories
+│   │   ├── 1763909083_true.jpg
+│   │   ├── 1763909089_gen-h-z7211337676827_6fcb0b8cd8bd4ee45dc4e6130da9fa5f.jpg
+│   │   ├── 1763909094_true.jpg
+│   │   └── 1763909915_arch_logo___neon_by_painlessrob_dbey3uc-pre.jpg
+│   ├── news
+│   │   ├── 2025-11-11-204214_hyprshot.png
+│   │   ├── 2025-11-11-233520_hyprshot.png
+│   │   └── xd.webp
+│   ├── products
+│   │   ├── 1763792449_401262_archlinux_icon.png
+│   │   ├── 1763792459_icons8-arch-linux-96.png
+│   │   ├── 1763792880_401262_archlinux_icon.png
+│   │   ├── 1763796498_0_2025-11-11-204049_hyprshot.png
+│   │   ├── 1763796498_1_2025-11-11-204214_hyprshot.png
+│   │   ├── 1763796498_2_2025-11-11-233520_hyprshot.png
+│   │   ├── 1763796498_3_2025-11-16-113040_hyprshot.png
+│   │   ├── cat-da.jpg
+│   │   ├── doraemon moive 43.jpg
+│   │   ├── g1.jpg
+│   │   ├── g2.jpg
+│   │   ├── g3.jpg
+│   │   ├── g4.jpg
+│   │   ├── gach.jpg
+│   │   ├── gach-lat-nen.jpg
+│   │   ├── gach-ong-4-lo.jpg
+│   │   ├── h1.jpg
+│   │   ├── h2.jpg
+│   │   ├── h3.jpg
+│   │   ├── h4.jpg
+│   │   ├── h5.jpg
+│   │   ├── h6.jpg
+│   │   ├── m1.jpg
+│   │   ├── m2.jpg
+│   │   ├── m3.jpg
+│   │   ├── m4.jpg
+│   │   ├── placeholder.svg
+│   │   ├── son-nuoc.jpg
+│   │   ├── test-write-1763792401.txt
+│   │   ├── thep-cuon-hoa-phat.jpg
+│   │   ├── thep-hinh.jpg
+│   │   ├── thep.jpg
+│   │   ├── v1.jpg
+│   │   ├── v2.jpg
+│   │   ├── v3.jpg
+│   │   ├── v4.jpg
+│   │   ├── v5.jpg
+│   │   ├── v6.jpg
+│   │   ├── v7.jpg
+│   │   ├── xi-mang-ha-tien.jpg
+│   │   └── ximang.jpg
+│   └── users
+│       ├── 1763715701_69202a757794d.png
+│       ├── 1763797755_401262_archlinux_icon.png
+│       ├── 1763913840_401262_archlinux_icon.png
+│       ├── doraemon.jpg
+│       ├── female.png
+│       ├── male.png
+│       └── user.png
+├── index.php
+├── instruction.txt
+├── model
+│   ├── coupon.php
+│   ├── customer.php
+│   ├── danhgia.php
+│   ├── danhmuc.php
+│   ├── database.php
+│   ├── diachi.php
+│   ├── donhangct.php
+│   ├── donhang.php
+│   ├── giohang.php
+│   ├── kho.php
+│   ├── mailer.php
+│   ├── nguoidung.php
+│   ├── nhacungcap.php
+│   ├── nhanvien.php
+│   ├── nhapkho.php
+│   ├── price_sheet.php
+│   ├── sanpham.php
+│   ├── session_helper.php
+│   ├── site_info.php
+│   ├── thuonghieu.php
+│   ├── tintuc.php
+│   └── view_tracker.php
+├── public
+│   ├── about
+│   │   └── about.php
+│   ├── account
+│   │   ├── account.php
+│   │   ├── addresses.php
+│   │   ├── changepassword.php
+│   │   ├── loginform.php
+│   │   ├── login-regis.jpg
+│   │   ├── orderdetail.php
+│   │   ├── orders.php
+│   │   ├── points.php
+│   │   └── registerform.php
+│   ├── api
+│   │   └── chatbot.php
+│   ├── cart
+│   │   ├── cart.php
+│   │   ├── checkout.php
+│   │   └── message.php
+│   ├── contact
+│   │   └── contact.php
+│   ├── css
+│   │   └── theme.css
+│   ├── home
+│   │   └── main.php
+│   ├── inc
+│   │   ├── bottom.php
+│   │   ├── carousel.php
+│   │   ├── top.php
+│   │   ├── topview.php
+│   │   └── topview_trending.php
+│   ├── index.php
+│   ├── news
+│   │   ├── news_detail.php
+│   │   └── news.php
+│   ├── price_sheets
+│   │   ├── detail.php
+│   │   └── index.php
+│   └── product
+│       ├── detail.php
+│       └── group.php
+├── structure.txt
+├── tools
+│   ├── check_order_inventory.php
+│   ├── confirm_order_cli.php
+│   ├── move_documents_to_public.sh
+│   ├── send_order_mail.php
+│   ├── send_status_mail.php
+│   ├── send_test_email.php
+│   ├── test_coupon_filter.php
+│   ├── test_owned_coupons.php
+│   └── test_redeem_zero.php
+└── vendor
+    ├── autoload.php
+    ├── composer
+    │   ├── autoload_classmap.php
+    │   ├── autoload_namespaces.php
+    │   ├── autoload_psr4.php
+    │   ├── autoload_real.php
+    │   ├── autoload_static.php
+    │   ├── ClassLoader.php
+    │   ├── installed.json
+    │   ├── installed.php
+    │   ├── InstalledVersions.php
+    │   ├── LICENSE
+    │   └── platform_check.php
+    └── phpmailer
+        └── phpmailer
+            ├── COMMITMENT
+            ├── composer.json
+            ├── get_oauth_token.php
+            ├── language
+            │   ├── phpmailer.lang-af.php
+            │   ├── phpmailer.lang-ar.php
+            │   ├── phpmailer.lang-as.php
+            │   ├── phpmailer.lang-az.php
+            │   ├── phpmailer.lang-ba.php
+            │   ├── phpmailer.lang-be.php
+            │   ├── phpmailer.lang-bg.php
+            │   ├── phpmailer.lang-bn.php
+            │   ├── phpmailer.lang-ca.php
+            │   ├── phpmailer.lang-cs.php
+            │   ├── phpmailer.lang-da.php
+            │   ├── phpmailer.lang-de.php
+            │   ├── phpmailer.lang-el.php
+            │   ├── phpmailer.lang-eo.php
+            │   ├── phpmailer.lang-es.php
+            │   ├── phpmailer.lang-et.php
+            │   ├── phpmailer.lang-fa.php
+            │   ├── phpmailer.lang-fi.php
+            │   ├── phpmailer.lang-fo.php
+            │   ├── phpmailer.lang-fr.php
+            │   ├── phpmailer.lang-gl.php
+            │   ├── phpmailer.lang-he.php
+            │   ├── phpmailer.lang-hi.php
+            │   ├── phpmailer.lang-hr.php
+            │   ├── phpmailer.lang-hu.php
+            │   ├── phpmailer.lang-hy.php
+            │   ├── phpmailer.lang-id.php
+            │   ├── phpmailer.lang-it.php
+            │   ├── phpmailer.lang-ja.php
+            │   ├── phpmailer.lang-ka.php
+            │   ├── phpmailer.lang-ko.php
+            │   ├── phpmailer.lang-ku.php
+            │   ├── phpmailer.lang-lt.php
+            │   ├── phpmailer.lang-lv.php
+            │   ├── phpmailer.lang-mg.php
+            │   ├── phpmailer.lang-mn.php
+            │   ├── phpmailer.lang-ms.php
+            │   ├── phpmailer.lang-nb.php
+            │   ├── phpmailer.lang-nl.php
+            │   ├── phpmailer.lang-pl.php
+            │   ├── phpmailer.lang-pt_br.php
+            │   ├── phpmailer.lang-pt.php
+            │   ├── phpmailer.lang-ro.php
+            │   ├── phpmailer.lang-ru.php
+            │   ├── phpmailer.lang-si.php
+            │   ├── phpmailer.lang-sk.php
+            │   ├── phpmailer.lang-sl.php
+            │   ├── phpmailer.lang-sr_latn.php
+            │   ├── phpmailer.lang-sr.php
+            │   ├── phpmailer.lang-sv.php
+            │   ├── phpmailer.lang-tl.php
+            │   ├── phpmailer.lang-tr.php
+            │   ├── phpmailer.lang-uk.php
+            │   ├── phpmailer.lang-ur.php
+            │   ├── phpmailer.lang-vi.php
+            │   ├── phpmailer.lang-zh_cn.php
+            │   └── phpmailer.lang-zh.php
+            ├── LICENSE
+            ├── README.md
+            ├── SECURITY.md
+            ├── SMTPUTF8.md
+            ├── src
+            │   ├── DSNConfigurator.php
+            │   ├── Exception.php
+            │   ├── OAuth.php
+            │   ├── OAuthTokenProvider.php
+            │   ├── PHPMailer.php
+            │   ├── POP3.php
+            │   └── SMTP.php
+            └── VERSION
