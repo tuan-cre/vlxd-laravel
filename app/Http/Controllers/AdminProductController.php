@@ -97,7 +97,7 @@ class AdminProductController extends Controller
         });
 
         return redirect()->route('admin.products.index')
-            ->with('success', 'Tạo sản phẩm thành công.');
+            ->with('success', 'Product created successfully.');
     }
 
     public function edit($id)
@@ -164,7 +164,7 @@ class AdminProductController extends Controller
         });
 
         return redirect()->route('admin.products.index')
-            ->with('success', 'Cập nhật sản phẩm thành công.');
+            ->with('success', 'Product updated successfully.');
     }
 
     public function destroy($id)
@@ -172,6 +172,6 @@ class AdminProductController extends Controller
         Product::where('id', $id)->update(['status' => 0]);
 
         return redirect()->route('admin.products.index')
-            ->with('success', 'Đã ẩn sản phẩm.');
+            ->with('success', 'Product hidden.');
     }
 }

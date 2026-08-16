@@ -10,7 +10,7 @@ class AdminCouponController extends Controller
 {
     public function index()
     {
-        $coupons = Coupon::latest()->paginate(15);
+        $coupons = Coupon::latest('id')->paginate(15);
 
         return view('admin.coupons.index', compact('coupons'));
     }
@@ -37,7 +37,7 @@ class AdminCouponController extends Controller
         ]);
 
         return redirect()->route('admin.coupons.index')
-            ->with('success', 'Tạo mã giảm giá thành công.');
+            ->with('success', 'Coupon created successfully.');
     }
 
     public function edit($id)
@@ -65,7 +65,7 @@ class AdminCouponController extends Controller
         ]);
 
         return redirect()->route('admin.coupons.index')
-            ->with('success', 'Cập nhật mã giảm giá thành công.');
+            ->with('success', 'Coupon updated successfully.');
     }
 
     public function destroy($id)
@@ -73,12 +73,12 @@ class AdminCouponController extends Controller
         $coupon = Coupon::findOrFail($id);
 
         if ($coupon->orders()->count() > 0) {
-            return back()->with('error', 'Không thể xóa mã giảm giá đã được sử dụng.');
+            return back()->with('error', 'Cannot delete coupon that has been used.');
         }
 
         $coupon->delete();
 
         return redirect()->route('admin.coupons.index')
-            ->with('success', 'Xóa mã giảm giá thành công.');
+            ->with('success', 'Coupon deleted successfully.');
     }
 }

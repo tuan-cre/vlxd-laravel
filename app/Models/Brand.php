@@ -14,6 +14,7 @@ class Brand extends Model
         'name',
         'slug',
         'logo',
+        'status',
     ];
 
     protected function casts(): array

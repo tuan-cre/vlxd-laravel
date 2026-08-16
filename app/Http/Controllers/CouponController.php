@@ -23,28 +23,28 @@ class CouponController extends Controller
         if (!$coupon) {
             return response()->json([
                 'success' => false,
-                'message' => 'Mã giảm giá không tồn tại.',
+                'message' => 'Coupon does not exist.',
             ]);
         }
 
         if ($coupon->start_date && $coupon->start_date->isFuture()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Mã giảm giá chưa đến hạn sử dụng.',
+                'message' => 'Coupon is not yet active.',
             ]);
         }
 
         if ($coupon->end_date && $coupon->end_date->isPast()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Mã giảm giá đã hết hạn.',
+                'message' => 'Coupon has expired.',
             ]);
         }
 
         if ($coupon->usage_limit !== null && $coupon->usage_limit <= 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Mã giảm giá đã hết lượt sử dụng.',
+                'message' => 'Coupon usage limit reached.',
             ]);
         }
 
@@ -61,7 +61,7 @@ class CouponController extends Controller
         if ($coupon->min_order_value && $subtotal < $coupon->min_order_value) {
             return response()->json([
                 'success' => false,
-                'message' => 'Đơn hàng chưa đạt giá trị tối thiểu ' . number_format($coupon->min_order_value, 0, ',', '.') . ' VNĐ.',
+                'message' => 'Order does not meet minimum value of ' . number_format($coupon->min_order_value, 0, ',', '.') . ' VND.',
             ]);
         }
 
@@ -79,7 +79,7 @@ class CouponController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Áp dụng mã giảm giá thành công.',
+            'message' => 'Coupon applied successfully.',
             'discount' => $discount,
             'code' => $coupon->code,
         ]);
@@ -92,7 +92,7 @@ class CouponController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Đã gỡ mã giảm giá.',
+            'message' => 'Coupon removed.',
         ]);
     }
 }

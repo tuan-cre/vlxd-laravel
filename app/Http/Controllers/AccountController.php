@@ -17,9 +17,13 @@ class AccountController extends Controller
             return redirect()->route('login');
         }
 
-        $customer = Customer::where('user_id', $nguoidung->id)->first();
+        $user = Customer::where('user_id', $nguoidung['id'])->first();
 
-        return view('account.index', compact('nguoidung', 'customer'));
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        return view('account.index', compact('user'));
     }
 
     public function update(Request $request)
@@ -39,7 +43,7 @@ class AccountController extends Controller
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        $customer = Customer::where('user_id', $nguoidung->id)->first();
+        $customer = Customer::where('user_id', $nguoidung['id'])->first();
 
         if ($customer) {
             $data = $request->only(['fullname', 'phone_number', 'address', 'birthday', 'gender']);
@@ -54,7 +58,7 @@ class AccountController extends Controller
             $customer->update($data);
         }
 
-        return back()->with('success', 'Cập nhật thông tin thành công.');
+        return back()->with('success', 'Profile updated successfully.');
     }
 
     public function addresses()
@@ -65,7 +69,7 @@ class AccountController extends Controller
             return redirect()->route('login');
         }
 
-        $customer = Customer::where('user_id', $nguoidung->id)->first();
+        $customer = Customer::where('user_id', $nguoidung['id'])->first();
         $addresses = $customer ? $customer->addresses()->get() : [];
 
         return view('account.addresses', compact('addresses'));
@@ -79,7 +83,7 @@ class AccountController extends Controller
             return redirect()->route('login');
         }
 
-        $customer = Customer::where('user_id', $nguoidung->id)->first();
+        $customer = Customer::where('user_id', $nguoidung['id'])->first();
 
         $orders = $customer
             ? $customer->orders()->with('details.product')->latest('order_date')->paginate(10)
@@ -96,7 +100,7 @@ class AccountController extends Controller
             return redirect()->route('login');
         }
 
-        $customer = Customer::where('user_id', $nguoidung->id)->first();
+        $customer = Customer::where('user_id', $nguoidung['id'])->first();
         $points = $customer ? $customer->loyalty_points : 0;
         $memberLevel = $customer ? $customer->member_level : 'bronze';
 

@@ -34,9 +34,9 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Products
+Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
-Route::post('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
 
 // Cart
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -64,7 +64,7 @@ Route::get('/news', [\App\Http\Controllers\AdminNewsController::class, 'publicIn
 // AUTHENTICATED CUSTOMER ROUTES
 // =====================================================
 
-Route::middleware(['auth.user', 'customer'])->group(function () {
+Route::middleware(['auth.user'])->group(function () {
     Route::get('/account', [AccountController::class, 'index'])->name('account.index');
     Route::post('/account/update', [AccountController::class, 'update'])->name('account.update');
     Route::get('/account/orders', [AccountController::class, 'orders'])->name('account.orders');

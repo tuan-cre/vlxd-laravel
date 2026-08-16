@@ -1,20 +1,20 @@
--- 1. TẠO DATABASE VÀ CHỌN DATABASE
-DROP DATABASE IF EXISTS vlxd_db;
-CREATE DATABASE vlxd_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE vlxd_db;
+-- 1. CREATE DATABASE AND SELECT DATABASE
+DROP DATABASE IF EXISTS vlxd;
+CREATE DATABASE vlxd CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE vlxd;
 
 -- =======================================================
--- NHÓM 1: BASIC INDEPENDENT TABLES (DANH MỤC, QUYỀN, ETC.)
+-- GROUP 1: BASIC INDEPENDENT TABLES (CATEGORIES, ROLES, ETC.)
 -- =======================================================
 
--- Bảng Quyền hạn (Admin, Staff, Customer)
+-- Roles Table (Admin, Staff, Customer)
 CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     description VARCHAR(255)
 ) ENGINE=InnoDB;
 
--- Bảng Danh mục
+-- Categories Table
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE categories (
     status TINYINT DEFAULT 1
 ) ENGINE=InnoDB;
 
--- Bảng Thương hiệu
+-- Brands Table
 CREATE TABLE brands (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE brands (
     logo VARCHAR(255)
 ) ENGINE=InnoDB;
 
--- Nhà cung cấp
+-- Suppliers Table
 CREATE TABLE suppliers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE suppliers (
     tax_code VARCHAR(50)
 ) ENGINE=InnoDB;
 
--- Kho hàng
+-- Warehouses Table
 CREATE TABLE warehouses (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE warehouses (
     UNIQUE KEY (code)
 ) ENGINE=InnoDB;
 
--- Mã giảm giá (Must be created before orders/customer_coupons)
+-- Coupons Table (Must be created before orders/customer_coupons)
 CREATE TABLE coupons (
     id INT AUTO_INCREMENT PRIMARY KEY,
     code VARCHAR(50) UNIQUE NOT NULL,
@@ -69,10 +69,10 @@ CREATE TABLE coupons (
 ) ENGINE=InnoDB;
 
 -- =======================================================
--- NHÓM 2: USERS & PRODUCTS (LEVEL 1 DEPENDENCIES)
+-- GROUP 2: USERS & PRODUCTS (LEVEL 1 DEPENDENCIES)
 -- =======================================================
 
--- Bảng Người dùng (Depends on roles)
+-- Users Table (Depends on roles)
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fullname VARCHAR(100) DEFAULT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- Bảng nhân viên (Depends on users)
+-- Employees Table (Depends on users)
 CREATE TABLE employees (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT DEFAULT NULL,
@@ -101,7 +101,7 @@ CREATE TABLE employees (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- Bảng Sản phẩm (Depends on categories, brands)
+-- Products Table (Depends on categories, brands)
 CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT,
@@ -125,10 +125,10 @@ CREATE TABLE products (
 ) ENGINE=InnoDB;
 
 -- =======================================================
--- NHÓM 3: DEEP DEPENDENCIES (CUSTOMERS, INVENTORY, ORDERS)
+-- GROUP 3: DEEP DEPENDENCIES (CUSTOMERS, INVENTORY, ORDERS)
 -- =======================================================
 
--- Bảng Thư viện ảnh (Depends on products)
+-- Product Images Table (Depends on products)
 CREATE TABLE product_images (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
@@ -137,7 +137,7 @@ CREATE TABLE product_images (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Bảng Khách hàng (Depends on users)
+-- Customers Table (Depends on users)
 CREATE TABLE customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -159,7 +159,7 @@ CREATE TABLE customers (
     last_order_date DATETIME
 ) ENGINE=InnoDB;
 
--- Bảng địa chỉ khách hàng (Depends on customers)
+-- Customer Addresses Table (Depends on customers)
 CREATE TABLE customer_addresses (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL,
@@ -174,7 +174,7 @@ CREATE TABLE customer_addresses (
     FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Khách hàng sở hữu Coupon (Depends on customers, coupons)
+-- Customer Coupons (Depends on customers, coupons)
 CREATE TABLE IF NOT EXISTS customer_coupons (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL,
@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS customer_coupons (
     FOREIGN KEY (coupon_id) REFERENCES coupons(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Tồn kho (Depends on products, warehouses)
+-- Inventory (Depends on products, warehouses)
 CREATE TABLE inventory (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
@@ -196,7 +196,7 @@ CREATE TABLE inventory (
     FOREIGN KEY (warehouse_id) REFERENCES warehouses(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Phiếu nhập kho (Depends on suppliers, users, warehouses)
+-- Import Bills (Depends on suppliers, users, warehouses)
 CREATE TABLE import_bills (
     id INT AUTO_INCREMENT PRIMARY KEY,
     supplier_id INT,
@@ -222,7 +222,7 @@ CREATE TABLE import_bill_details (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE NO ACTION
 ) ENGINE=InnoDB;
 
--- Đơn hàng (Depends on customers, coupons)
+-- Orders (Depends on customers, coupons)
 CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL,
@@ -244,7 +244,7 @@ CREATE TABLE orders (
     FOREIGN KEY (coupon_id) REFERENCES coupons(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
--- Chi tiết đơn hàng (Depends on orders, products)
+-- Order Details (Depends on orders, products)
 CREATE TABLE order_details (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
@@ -256,7 +256,7 @@ CREATE TABLE order_details (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
--- Ghi chép phân bổ tồn kho (Depends on orders, products, warehouses)
+-- Order Inventory Allocation (Depends on orders, products, warehouses)
 CREATE TABLE order_inventory (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
@@ -269,7 +269,7 @@ CREATE TABLE order_inventory (
     FOREIGN KEY (warehouse_id) REFERENCES warehouses(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Đánh giá sản phẩm (Depends on users, products)
+-- Product Reviews (Depends on users, products)
 CREATE TABLE reviews (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -281,7 +281,7 @@ CREATE TABLE reviews (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Tin tức / Blog (Depends on users)
+-- News / Blog (Depends on users)
 CREATE TABLE news (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -309,55 +309,55 @@ CREATE TABLE price_sheets (
 -- INSERT DỮ LIỆU MẪU (SEED DATA)
 -- =======================================================
 
--- 1. Thêm Role
+-- 1. Roles
 INSERT INTO roles (name, description) VALUES 
-('Admin', 'Quản trị viên hệ thống'), 
-('Customer', 'Khách hàng mua vật liệu'),
-('Nhan Vien', 'Nhân viên / Staff');
+('Admin', 'System administrator'), 
+('Customer', 'Customer'),
+('Staff', 'Staff employee');
 
--- 2. Thêm User
+-- 2. Users
 INSERT INTO users (fullname, email, password, role_id) VALUES 
-('Quản Trị Viên', 'admin@vlxd.com', 'e10adc3949ba59abbe56e057f20f883e', 1),
-('Nguyễn Văn A', 'khachhang@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', 2);
+('Administrator', 'admin@vlxd.com', 'e10adc3949ba59abbe56e057f20f883e', 1),
+('John Customer', 'khachhang@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', 2);
 
--- 3. Thêm Employees (Phải có user trước)
+-- 3. Employees
 INSERT INTO employees (user_id, role_id, position, department, phone_number, email, hire_date, salary, status) VALUES
-(NULL, 3, 'Quản lý kho', 'Kho', '0918765432', 'kho1@vlxd.com', '2020-01-15', 12000000, 1),
-(NULL, 3, 'Nhân viên bán hàng', 'Sales', '0912345679', 'sales1@vlxd.com', '2021-08-01', 8000000, 1),
-(1, 3, 'Kỹ thuật', 'Kỹ thuật', '0912345680', 'tech1@vlxd.com', '2022-05-20', 9000000, 1);
+(NULL, 3, 'Warehouse Manager', 'Warehouse', '0918765432', 'kho1@vlxd.com', '2020-01-15', 12000000, 1),
+(NULL, 3, 'Sales Representative', 'Sales', '0912345679', 'sales1@vlxd.com', '2021-08-01', 8000000, 1),
+(1, 3, 'Technician', 'Technical', '0912345680', 'tech1@vlxd.com', '2022-05-20', 9000000, 1);
 
--- 4. Thêm Khách hàng mẫu (Phải có users trước nếu link)
+-- 4. Customers
 INSERT INTO customers (user_id, role_id, fullname, email, phone_number, address, member_level, loyalty_points, total_spent, total_orders) VALUES
-(2, 2, 'Nguyễn Văn A', 'khachhang@gmail.com', '0912345678', 'Số 10, Đường Láng, Đống Đa, Hà Nội', 'silver', 500, 15000000, 3),
-(NULL, 2, 'Trần Thị B', 'tranthib@gmail.com', '0923456789', 'Số 25, Phố Huế, Hai Bà Trưng, Hà Nội', 'bronze', 150, 3500000, 1),
-(NULL, 2, 'Lê Văn C', 'levanc@gmail.com', '0934567890', 'Số 88, Giải Phóng, Thanh Xuân, Hà Nội', 'gold', 1200, 28000000, 7),
-(NULL, 2, 'Phạm Thị D', 'phamthid@gmail.com', '0945678901', 'Số 42, Cầu Giấy, Cầu Giấy, Hà Nội', 'bronze', 80, 2100000, 1);
+(2, 2, 'John Customer', 'khachhang@gmail.com', '0912345678', '10 Lang Street, Dong Da, Hanoi', 'silver', 500, 15000000, 3),
+(NULL, 2, 'Jane Smith', 'janesmith@gmail.com', '0923456789', '25 Hue Street, Hai Ba Trung, Hanoi', 'bronze', 150, 3500000, 1),
+(NULL, 2, 'Mike Johnson', 'mikej@gmail.com', '0934567890', '88 Giai Phong, Thanh Xuan, Hanoi', 'gold', 1200, 28000000, 7),
+(NULL, 2, 'Sarah Lee', 'sarahl@gmail.com', '0945678901', '42 Cau Giay, Cau Giay, Hanoi', 'bronze', 80, 2100000, 1);
 
--- 5. Thêm địa chỉ giao hàng
+-- 5. Customer Addresses
 INSERT INTO customer_addresses (customer_id, receiver_name, phone_number, province, district, ward, address_detail, is_default) VALUES
-(1, 'Nguyễn Văn A', '0912345678', 'Hà Nội', 'Đống Đa', 'Láng Thượng', 'Số 10, Đường Láng', 1),
-(1, 'Nguyễn Văn A (Công trình)', '0912345678', 'Hà Nội', 'Nam Từ Liêm', 'Cầu Diễn', 'Công trình xây dựng, Khu đô thị mới', 0),
-(2, 'Trần Thị B', '0923456789', 'Hà Nội', 'Hai Bà Trưng', 'Phố Huế', 'Số 25, Phố Huế', 1),
-(3, 'Lê Văn C', '0934567890', 'Hà Nội', 'Thanh Xuân', 'Khương Mai', 'Số 88, Giải Phóng', 1),
-(4, 'Phạm Thị D', '0945678901', 'Hà Nội', 'Cầu Giấy', 'Dịch Vọng', 'Số 42, Cầu Giấy', 1);
+(1, 'John Customer', '0912345678', 'Hanoi', 'Dong Da', 'Lang Thuong', '10 Lang Street', 1),
+(1, 'John Customer (Project Site)', '0912345678', 'Hanoi', 'Nam Tu Liem', 'Cau Dien', 'Construction site, New Urban Area', 0),
+(2, 'Jane Smith', '0923456789', 'Hanoi', 'Hai Ba Trung', 'Pho Hue', '25 Hue Street', 1),
+(3, 'Mike Johnson', '0934567890', 'Hanoi', 'Thanh Xuan', 'Khuong Mai', '88 Giai Phong Street', 1),
+(4, 'Sarah Lee', '0945678901', 'Hanoi', 'Cau Giay', 'Dich Vong', '42 Cau Giay Street', 1);
 
--- 6. Thêm Danh mục
-INSERT INTO categories (name, slug) VALUES 
-('Gạch Xây Dựng', 'gach-xay-dung'),
-('Xi Măng & Cát Đá', 'xi-mang-cat-da'),
-('Sắt Thép', 'sat-thep');
+-- 6. Categories
+INSERT INTO categories (name, slug, thumbnail) VALUES 
+('Bricks & Blocks', 'bricks-blocks', 'brickandblocks.jpg'),
+('Cement, Sand & Gravel', 'cement-sand-gravel', 'cement.jpg'),
+('Steel & Iron', 'steel-iron', 'steelandiron.jpg');
 
--- 7. Thêm Thương hiệu
+-- 7. Brands
 INSERT INTO brands (name, slug) VALUES 
-('Hòa Phát', 'hoa-phat'),
-('Hà Tiên', 'ha-tien'),
+('Hoa Phat', 'hoa-phat'),
+('Ha Tien', 'ha-tien'),
 ('Viglacera', 'viglacera');
 
--- 8. Thêm Nhà cung cấp
+-- 8. Suppliers
 INSERT INTO suppliers (name, phone, address) VALUES
-('Công ty VLXD Miền Nam', '0909123456', 'Quận 7, TP.HCM');
+('Southern Construction Materials Co.', '0909123456', 'District 7, Ho Chi Minh City');
 
--- 9. Thêm Coupons
+-- 9. Coupons
 INSERT INTO coupons (code, discount_type, discount_value, min_order_value, start_date, end_date, usage_limit, status, points_cost, min_member_level, requires_claim)
 VALUES
 ('WELCOME10', 'percent', 10, 0, NULL, NULL, 1000, 1, 0, 'bronze', 0),
@@ -368,42 +368,42 @@ VALUES
 INSERT INTO coupons (code, discount_type, discount_value, min_order_value, start_date, end_date, usage_limit, status, points_cost, min_member_level, requires_claim)
 VALUES ('BRONZE25', 'fixed', 25000, 0, NULL, NULL, 200, 1, 100, 'bronze', 1);
 
--- 10. Link Customer Coupon (Phải sau khi có customer và coupon)
+-- 10. Link Customer Coupon (Must be after customer and coupon)
 INSERT INTO customer_coupons (customer_id, coupon_id) VALUES (1, 3);
 
--- 11. Thêm Sản phẩm
+-- 11. Products
 INSERT INTO products (category_id, brand_id, name, slug, price, unit, stock, thumbnail) VALUES 
-(2, 2, 'Xi măng Hà Tiên Đa Dụng', 'xi-mang-ha-tien', 89000, 'Bao', 1000, 'ximang.jpg'),
-(1, 3, 'Gạch ống 4 lỗ Viglacera', 'gach-ong-4-lo', 1200, 'Viên', 50000, 'gach.jpg'),
-(3, 1, 'Thép cuộn phi 6 Hòa Phát', 'thep-cuon-hoa-phat', 15000, 'Kg', 2000, 'thep.jpg');
+(2, 2, 'Ha Tien Multi-Purpose Cement', 'ha-tien-multi-purpose-cement', 89000, 'Bag', 1000, 'cement.jpg'),
+(1, 3, 'Viglacera 4-Hole Hollow Brick', 'viglacera-4-hole-hollow-brick', 1200, 'Piece', 50000, 'gach-ong-4-lo.jpg'),
+(3, 1, 'Hoa Phat Steel Coil D6', 'hoa-phat-steel-coil-d6', 15000, 'Kg', 2000, 'steelandiron.jpg');
 
 INSERT INTO products (category_id, brand_id, name, slug, price, sale_price, thumbnail, unit, stock, is_featured, description) VALUES 
-(2, 2, 'Xi măng Hà Tiên Đa Dụng PCB40', 'xi-mang-ha-tien-pcb40', 89000, 85000, 'ximang.jpg', 'Bao', 5000, 1, 'Xi măng chất lượng cao, phù hợp mọi công trình'),
-(2, 2, 'Xi măng Hà Tiên Xây Dựng PCB30', 'xi-mang-ha-tien-pcb30', 82000, 0, 'xi-mang-ha-tien.jpg', 'Bao', 3000, 0, 'Xi măng cho công trình xây dựng dân dụng'),
-(2, 1, 'Cát Vàng Xây Dựng', 'cat-vang-xay-dung', 320000, 300000, 'cat-da.jpg', 'Khối', 500, 1, 'Cát vàng loại 1, sạch, độ mịn cao'),
-(2, 1, 'Đá Xây 1x2', 'da-xay-1x2', 280000, 0, 'cat-da.jpg', 'Khối', 800, 0, 'Đá xây kích thước 1x2, sạch'),
-(2, 1, 'Đá Mi Xây Dựng', 'da-mi-xay-dung', 250000, 240000, 'cat-da.jpg', 'Khối', 600, 0, 'Đá mi loại 1'),
-(1, 3, 'Gạch Ống 4 Lỗ Viglacera 6x9x18', 'gach-ong-4-lo-viglacera', 1200, 1150, 'gach.jpg', 'Viên', 50000, 1, 'Gạch ống chất lượng cao Viglacera'),
-(1, 3, 'Gạch Ống 2 Lỗ Viglacera 6x9x18', 'gach-ong-2-lo-viglacera', 900, 0, 'gach-ong-4-lo.jpg', 'Viên', 40000, 0, 'Gạch ống 2 lỗ tiêu chuẩn'),
-(1, 3, 'Gạch Lát Nền 60x60 Viglacera', 'gach-lat-nen-60x60', 85000, 79000, 'gach-lat-nen.jpg', 'Viên', 10000, 1, 'Gạch lát nền cao cấp, vân đá tự nhiên'),
-(1, 3, 'Gạch Lát Nền 80x80 Viglacera', 'gach-lat-nen-80x80', 145000, 135000, 'gach-lat-nen.jpg', 'Viên', 8000, 0, 'Gạch lát nền 80x80 sang trọng'),
-(1, 3, 'Gạch Ốp Tường 30x60', 'gach-op-tuong-30x60', 65000, 0, 'gach-ong-4-lo.jpg', 'Viên', 15000, 0, 'Gạch ốp tường phòng khách, phòng ngủ'),
-(3, 1, 'Thép Cuộn D6 Hòa Phát', 'thep-cuon-d6-hoa-phat', 15000, 14500, 'thep.jpg', 'Kg', 20000, 1, 'Thép cuộn phi 6 chính hãng Hòa Phát'),
-(3, 1, 'Thép Cuộn D8 Hòa Phát', 'thep-cuon-d8-hoa-phat', 15200, 0, 'thep-cuon-hoa-phat.jpg', 'Kg', 18000, 0, 'Thép cuộn phi 8 Hòa Phát'),
-(3, 1, 'Thép Cuộn D10 Hòa Phát', 'thep-cuon-d10-hoa-phat', 15500, 15000, 'thep-cuon-hoa-phat.jpg', 'Kg', 25000, 1, 'Thép cuộn phi 10 giá tốt'),
-(3, 1, 'Thép Hình V 100x100 Hòa Phát', 'thep-hinh-v-100x100', 28000, 0, 'thep-hinh.jpg', 'Kg', 5000, 0, 'Thép hình chữ V 100x100'),
-(3, 1, 'Thép Hình U 120x60 Hòa Phát', 'thep-hinh-u-120x60', 25000, 24000, 'thep-hinh.jpg', 'Kg', 6000, 0, 'Thép hình chữ U 120x60'),
-(3, 1, 'Thép Tấm 2mm Hòa Phát', 'thep-tam-2mm', 32000, 0, 'thep.jpg', 'Kg', 3000, 0, 'Thép tấm dày 2mm');
+(2, 2, 'Ha Tien Multi-Purpose Cement PCB40', 'ha-tien-pcb40-cement', 89000, 85000, 'ha-tien-pcb40.jpg', 'Bag', 5000, 1, 'High quality cement, suitable for all construction projects'),
+(2, 2, 'Ha Tien Construction Cement PCB30', 'ha-tien-pcb30-cement', 82000, 0, 'ha-tien-pcb30.jpg', 'Bag', 3000, 0, 'Cement for residential construction projects'),
+(2, 1, 'Yellow Construction Sand', 'yellow-construction-sand', 320000, 300000, 'cat-vang-xay-dung.jpg', 'Cubic Meter', 500, 1, 'Premium grade yellow sand, clean, high fineness'),
+(2, 1, 'Construction Gravel 1x2', 'construction-gravel-1x2', 280000, 0, 'da-xay-1x2.jpg', 'Cubic Meter', 800, 0, 'Construction gravel size 1x2, clean'),
+(2, 1, 'Fine Construction Gravel', 'fine-construction-gravel', 250000, 240000, 'da-mi-xay-dung.jpg', 'Cubic Meter', 600, 0, 'Grade 1 fine gravel'),
+(1, 3, 'Viglacera 4-Hole Hollow Brick 6x9x18', 'viglacera-4-hole-hollow-brick-6x9x18', 1200, 1150, 'gach-ong-4-lo.jpg', 'Piece', 50000, 1, 'High quality Viglacera hollow brick'),
+(1, 3, 'Viglacera 2-Hole Hollow Brick 6x9x18', 'viglacera-2-hole-hollow-brick-6x9x18', 900, 0, 'brickandblocks.jpg', 'Piece', 40000, 0, 'Standard 2-hole hollow brick'),
+(1, 3, 'Viglacera Floor Tile 60x60', 'viglacera-floor-tile-60x60', 85000, 79000, 'gach-lat-nen.jpg', 'Piece', 10000, 1, 'Premium floor tile, natural stone pattern'),
+(1, 3, 'Viglacera Floor Tile 80x80', 'viglacera-floor-tile-80x80', 145000, 135000, 'gach-lat-nen.jpg', 'Piece', 8000, 0, 'Luxury 80x80 floor tile'),
+(1, 3, 'Wall Tile 30x60', 'wall-tile-30x60', 65000, 0, 'brickandblocks.jpg', 'Piece', 15000, 0, 'Wall tile for living room, bedroom'),
+(3, 1, 'Hoa Phat Steel Coil D6', 'hoa-phat-steel-coil-d6', 15000, 14500, 'steelandiron.jpg', 'Kg', 20000, 1, 'Genuine Hoa Phat D6 steel coil'),
+(3, 1, 'Hoa Phat Steel Coil D8', 'hoa-phat-steel-coil-d8', 15200, 0, 'hoa-phat-thep-cuon.jpg', 'Kg', 18000, 0, 'Hoa Phat D8 steel coil'),
+(3, 1, 'Hoa Phat Steel Coil D10', 'hoa-phat-steel-coil-d10', 15500, 15000, 'hoa-phat-thep-cuon.jpg', 'Kg', 25000, 1, 'Hoa Phat D10 steel coil, best price'),
+(3, 1, 'Hoa Phat V-Beam Steel 100x100', 'hoa-phat-v-beam-steel-100x100', 28000, 0, 'hoa-phat-thep-hinh.webp', 'Kg', 5000, 0, 'Hoa Phat V-shape steel beam 100x100'),
+(3, 1, 'Hoa Phat U-Beam Steel 120x60', 'hoa-phat-u-beam-steel-120x60', 25000, 24000, 'hoa-phat-thep-hinh.webp', 'Kg', 6000, 0, 'Hoa Phat U-shape steel beam 120x60'),
+(3, 1, 'Hoa Phat Steel Plate 2mm', 'hoa-phat-steel-plate-2mm', 32000, 0, 'steelandiron.jpg', 'Kg', 3000, 0, 'Hoa Phat 2mm thick steel plate');
 
 -- 12. Setup Warehouses & Inventory
 -- Ensure default warehouse for seeded data
-INSERT INTO warehouses (name, code, address) VALUES ('Kho trung tâm', 'KHO-DEFAULT', 'Kho mặc định')
+INSERT INTO warehouses (name, code, address) VALUES ('Central Warehouse', 'KHO-DEFAULT', 'Default warehouse')
 ON DUPLICATE KEY UPDATE name = VALUES(name);
 
 -- Additional sample warehouses
 INSERT INTO warehouses (name, code, address) VALUES
-('Kho miền Bắc', 'KHO-NORTH', 'Hà Nội - Kho miền Bắc'),
-('Kho miền Nam', 'KHO-SOUTH', 'TP.HCM - Kho miền Nam')
+('Northern Warehouse', 'KHO-NORTH', 'Hanoi - Northern Warehouse'),
+('Southern Warehouse', 'KHO-SOUTH', 'Ho Chi Minh City - Southern Warehouse')
 ON DUPLICATE KEY UPDATE name = VALUES(name);
 
 -- Populate inventory for default warehouse
@@ -430,12 +430,12 @@ LEFT JOIN inventory i ON i.product_id = p.id AND i.warehouse_id = w.id
 WHERE i.id IS NULL;
 
 INSERT INTO price_sheets (pdf_url, title, effective_date) VALUES
-('pricesheet_sep2025.pdf', 'Bảng giá tháng 09/2025', '2025-09-01'),
-('pricesheet_oct2025.pdf', 'Bảng giá tháng 10/2025', '2025-10-01');
+('pricesheet_sep2025.pdf', 'Price List September 2025', '2025-09-01'),
+('pricesheet_oct2025.pdf', 'Price List October 2025', '2025-10-01');
 
 INSERT INTO news (title, slug, thumbnail, summary, content, category, status, author_id) VALUES
-('Mẹo chọn xi măng phù hợp cho công trình của bạn', 'meo-chon-xi-mang-phu-hop', 'news1.jpg', 'Tìm hiểu cách chọn xi măng phù hợp với từng loại công trình xây dựng.', 'Nội dung chi tiết về mẹo chọn xi măng...', 'Xây dựng', 'published', 1),
-('Xu hướng sử dụng gạch lát nền trong năm 2025', 'xu-huong-su-dung-gach-lat-nen-2025', 'news2.jpg', 'Khám phá các xu hướng gạch lát nền đang thịnh hành trong năm 2025.', 'Nội dung chi tiết về xu hướng gạch lát nền...', 'Nội thất', 'published', 1);
+('How to Choose the Right Cement for Your Project', 'how-to-choose-right-cement', 'news1.jpg', 'Learn how to select the appropriate cement for different construction projects.', 'Detailed guide on choosing cement...', 'Construction', 'published', 1),
+('Floor Tile Trends in 2025', 'floor-tile-trends-2025', 'news2.jpg', 'Discover the latest floor tile trends for 2025.', 'Detailed content about floor tile trends...', 'Interior Design', 'published', 1);
 
 -- =======================================================
 -- TRIGGERS (DEFINED LAST TO AVOID ERRORS DURING SEEDING)

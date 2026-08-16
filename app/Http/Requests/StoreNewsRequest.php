@@ -25,14 +25,14 @@ class StoreNewsRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'Tiêu đề là bắt buộc.',
-            'title.string' => 'Tiêu đề phải là chuỗi ký tự.',
-            'summary.string' => 'Tóm tắt phải là chuỗi ký tự.',
-            'content.required' => 'Nội dung là bắt buộc.',
-            'content.string' => 'Nội dung phải là chuỗi ký tự.',
-            'category.string' => 'Danh mục phải là chuỗi ký tự.',
-            'status.required' => 'Trạng thái là bắt buộc.',
-            'status.in' => 'Trạng thái không hợp lệ. Chọn: draft hoặc published.',
+            'title.required' => 'Title is required.',
+            'title.string' => 'Title must be a string.',
+            'summary.string' => 'Summary must be a string.',
+            'content.required' => 'Content is required.',
+            'content.string' => 'Content must be a string.',
+            'category.string' => 'Category must be a string.',
+            'status.required' => 'Status is required.',
+            'status.in' => 'Status is invalid. Accepted values: draft or published.',
         ];
     }
 }

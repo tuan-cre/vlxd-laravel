@@ -7,9 +7,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::unprepared("
-            -- Calculate total for a given order
-            DELIMITER //
+        DB::unprepared('
             CREATE PROCEDURE sp_order_total(IN p_order_id INT)
             BEGIN
                 SELECT
@@ -24,9 +22,10 @@ return new class extends Migration
                 LEFT JOIN order_details od ON od.order_id = o.id
                 WHERE o.id = p_order_id
                 GROUP BY o.id;
-            END //
+            END
+        ');
 
-            -- Get stock summary for a product across all warehouses
+        DB::unprepared('
             CREATE PROCEDURE sp_stock_summary(IN p_product_id INT)
             BEGIN
                 SELECT
@@ -38,9 +37,10 @@ return new class extends Migration
                 JOIN warehouses w ON i.warehouse_id = w.id
                 WHERE i.product_id = p_product_id
                 ORDER BY i.stock DESC;
-            END //
+            END
+        ');
 
-            -- Get revenue report for a date range
+        DB::unprepared('
             CREATE PROCEDURE sp_revenue_report(
                 IN p_start_date DATE,
                 IN p_end_date DATE
@@ -56,9 +56,10 @@ return new class extends Migration
                   AND o.status != 5
                 GROUP BY DATE(o.order_date)
                 ORDER BY order_day;
-            END //
+            END
+        ');
 
-            -- Get best-selling products
+        DB::unprepared('
             CREATE PROCEDURE sp_top_products(IN p_limit INT)
             BEGIN
                 SELECT
@@ -77,10 +78,8 @@ return new class extends Migration
                 GROUP BY p.id
                 ORDER BY total_sold DESC
                 LIMIT p_limit;
-            END //
-
-            DELIMITER ;
-        ");
+            END
+        ');
     }
 
     public function down(): void

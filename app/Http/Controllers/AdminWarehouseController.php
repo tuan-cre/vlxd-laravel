@@ -34,7 +34,7 @@ class AdminWarehouseController extends Controller
         ]);
 
         return redirect()->route('admin.warehouses.index')
-            ->with('success', 'Tạo kho hàng thành công.');
+            ->with('success', 'Warehouse created successfully.');
     }
 
     public function edit($id)
@@ -61,7 +61,7 @@ class AdminWarehouseController extends Controller
         ]);
 
         return redirect()->route('admin.warehouses.index')
-            ->with('success', 'Cập nhật kho hàng thành công.');
+            ->with('success', 'Warehouse updated successfully.');
     }
 
     public function destroy($id)
@@ -69,12 +69,12 @@ class AdminWarehouseController extends Controller
         $warehouse = Warehouse::findOrFail($id);
 
         if ($warehouse->inventories()->where('stock', '>', 0)->count() > 0) {
-            return back()->with('error', 'Không thể xóa kho hàng còn tồn kho.');
+            return back()->with('error', 'Cannot delete warehouse with existing stock.');
         }
 
         $warehouse->delete();
 
         return redirect()->route('admin.warehouses.index')
-            ->with('success', 'Xóa kho hàng thành công.');
+            ->with('success', 'Warehouse deleted successfully.');
     }
 }

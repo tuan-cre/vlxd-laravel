@@ -23,13 +23,13 @@ class StoreReviewRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'product_id.required' => 'ID sản phẩm là bắt buộc.',
-            'product_id.exists' => 'Sản phẩm không tồn tại.',
-            'rating.required' => 'Đánh giá là bắt buộc.',
-            'rating.integer' => 'Đánh giá phải là số nguyên.',
-            'rating.min' => 'Đánh giá phải từ 1 đến 5.',
-            'rating.max' => 'Đánh giá phải từ 1 đến 5.',
-            'comment.string' => 'Bình luận phải là chuỗi ký tự.',
+            'product_id.required' => 'Product ID is required.',
+            'product_id.exists' => 'Product does not exist.',
+            'rating.required' => 'Rating is required.',
+            'rating.integer' => 'Rating must be an integer.',
+            'rating.min' => 'Rating must be between 1 and 5.',
+            'rating.max' => 'Rating must be between 1 and 5.',
+            'comment.string' => 'Comment must be a string.',
         ];
     }
 }

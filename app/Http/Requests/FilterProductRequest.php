@@ -27,16 +27,16 @@ class FilterProductRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'category_id.exists' => 'Danh mục không tồn tại.',
-            'brand_id.exists' => 'Thương hiệu không tồn tại.',
-            'min_price.numeric' => 'Giá tối thiểu phải là số.',
-            'max_price.numeric' => 'Giá tối đa phải là số.',
-            'sort.in' => 'Sắp xếp không hợp lệ. Chọn: price_asc, price_desc, newest hoặc best_selling.',
-            'page.integer' => 'Trang phải là số nguyên.',
-            'page.min' => 'Trang phải lớn hơn hoặc bằng 1.',
-            'per_page.integer' => 'Số sản phẩm mỗi trang phải là số nguyên.',
-            'per_page.min' => 'Số sản phẩm mỗi trang phải lớn hơn hoặc bằng 1.',
-            'per_page.max' => 'Số sản phẩm mỗi trang không được quá 50.',
+            'category_id.exists' => 'Category does not exist.',
+            'brand_id.exists' => 'Brand does not exist.',
+            'min_price.numeric' => 'Minimum price must be a number.',
+            'max_price.numeric' => 'Maximum price must be a number.',
+            'sort.in' => 'Sort is invalid. Accepted values: price_asc, price_desc, newest or best_selling.',
+            'page.integer' => 'Page must be an integer.',
+            'page.min' => 'Page must be greater than or equal to 1.',
+            'per_page.integer' => 'Items per page must be an integer.',
+            'per_page.min' => 'Items per page must be greater than or equal to 1.',
+            'per_page.max' => 'Items per page must not exceed 50.',
         ];
     }
 }

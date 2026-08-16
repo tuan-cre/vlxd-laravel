@@ -96,15 +96,15 @@ class AdminReportController extends Controller
             ->whereDate('order_date', '<=', $dateTo)
             ->get();
 
-        $csvContent = "Mã đơn,Họ tên,SĐT,Địa chỉ,Ngày đặt,Tổng tiền,Trạng thái\n";
+        $csvContent = "Order ID,Full Name,Phone,Address,Order Date,Total,Status\n";
 
         foreach ($orders as $order) {
             $statusText = match($order->status) {
-                1 => 'Chờ xử lý',
-                2 => 'Đã xác nhận',
-                3 => 'Đang giao',
-                4 => 'Hoàn thành',
-                default => 'Không xác định',
+                1 => 'Pending',
+                2 => 'Confirmed',
+                3 => 'Delivering',
+                4 => 'Completed',
+                default => 'Unknown',
             };
 
             $csvContent .= sprintf(
@@ -119,7 +119,7 @@ class AdminReportController extends Controller
             );
         }
 
-        $filename = "bao_cao_don_hang_{$dateFrom}_{$dateTo}.csv";
+        $filename = "order_report_{$dateFrom}_{$dateTo}.csv";
 
         return Response::make($csvContent, 200, [
             'Content-Type' => 'text/csv',

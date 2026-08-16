@@ -23,14 +23,14 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'fullname.required' => 'Họ tên là bắt buộc.',
-            'fullname.string' => 'Họ tên phải là chuỗi ký tự.',
-            'email.required' => 'Email là bắt buộc.',
-            'email.email' => 'Email không hợp lệ.',
-            'email.unique' => 'Email đã được sử dụng.',
-            'password.required' => 'Mật khẩu là bắt buộc.',
-            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
-            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+            'fullname.required' => 'Full name is required.',
+            'fullname.string' => 'Full name must be a string.',
+            'email.required' => 'Email is required.',
+            'email.email' => 'Email is invalid.',
+            'email.unique' => 'Email is already taken.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 6 characters.',
+            'password.confirmed' => 'Password confirmation does not match.',
         ];
     }
 }

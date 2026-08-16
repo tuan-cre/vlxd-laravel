@@ -11,7 +11,7 @@ class AdminCategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('parent')->latest()->paginate(15);
+        $categories = Category::with('parent')->latest('id')->paginate(15);
 
         return view('admin.categories.index', compact('categories'));
     }
@@ -54,7 +54,7 @@ class AdminCategoryController extends Controller
         ]);
 
         return redirect()->route('admin.categories.index')
-            ->with('success', 'Tạo danh mục thành công.');
+            ->with('success', 'Category created successfully.');
     }
 
     public function edit($id)
@@ -102,7 +102,7 @@ class AdminCategoryController extends Controller
         $category->update($data);
 
         return redirect()->route('admin.categories.index')
-            ->with('success', 'Cập nhật danh mục thành công.');
+            ->with('success', 'Category updated successfully.');
     }
 
     public function destroy($id)
@@ -110,11 +110,11 @@ class AdminCategoryController extends Controller
         $category = Category::findOrFail($id);
 
         if ($category->products()->count() > 0) {
-            return back()->with('error', 'Không thể xóa danh mục có sản phẩm.');
+            return back()->with('error', 'Cannot delete category with existing products.');
         }
 
         if ($category->children()->count() > 0) {
-            return back()->with('error', 'Không thể xóa danh mục có danh mục con.');
+            return back()->with('error', 'Cannot delete category with subcategories.');
         }
 
         if ($category->thumbnail && File::exists(public_path($category->thumbnail))) {
@@ -124,6 +124,6 @@ class AdminCategoryController extends Controller
         $category->delete();
 
         return redirect()->route('admin.categories.index')
-            ->with('success', 'Xóa danh mục thành công.');
+            ->with('success', 'Category deleted successfully.');
     }
 }

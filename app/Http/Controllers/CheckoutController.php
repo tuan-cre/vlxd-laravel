@@ -19,7 +19,7 @@ class CheckoutController extends Controller
         $cart = Session::get('giohang', []);
 
         if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống.');
+            return redirect()->route('cart.index')->with('error', 'Cart is empty.');
         }
 
         $cartItems = [];
@@ -46,8 +46,8 @@ class CheckoutController extends Controller
         $addresses = [];
         $nguoidung = Session::get('nguoidung');
 
-        if ($nguoidung && $nguoidung->role_id == 2) {
-            $customer = Customer::where('user_id', $nguoidung->id)->first();
+        if ($nguoidung && $nguoidung['role_id'] == 2) {
+            $customer = Customer::where('user_id', $nguoidung['id'])->first();
             if ($customer) {
                 $addresses = $customer->addresses()->get();
             }
@@ -69,15 +69,15 @@ class CheckoutController extends Controller
         $cart = Session::get('giohang', []);
 
         if (empty($cart)) {
-            return back()->with('error', 'Giỏ hàng trống.');
+            return back()->with('error', 'Cart is empty.');
         }
 
         DB::transaction(function () use ($request, $cart) {
             $nguoidung = Session::get('nguoidung');
             $customerId = null;
 
-            if ($nguoidung && $nguoidung->role_id == 2) {
-                $customer = Customer::where('user_id', $nguoidung->id)->first();
+            if ($nguoidung && $nguoidung['role_id'] == 2) {
+                $customer = Customer::where('user_id', $nguoidung['id'])->first();
                 $customerId = $customer?->id;
             }
 
@@ -167,7 +167,8 @@ class CheckoutController extends Controller
 
         $orderId = DB::table('orders')->latest('id')->first()->id;
 
-        return redirect()->route('checkout.success', $orderId);
+        return redirect()->route('checkout.success', $orderId)
+            ->with('success', 'Order placed successfully! <a href="' . route('checkout.success', $orderId) . '" class="fw-bold">View order #' . $orderId . '</a>');
     }
 
     public function success($orderId)

@@ -50,7 +50,7 @@ class CartController extends Controller
         $product = Product::where('id', $productId)->where('status', 1)->firstOrFail();
 
         if ($product->stock < $quantity) {
-            return back()->with('error', 'Số lượng tồn kho không đủ.');
+            return back()->with('error', 'Insufficient stock.');
         }
 
         $cart = Session::get('giohang', []);
@@ -58,7 +58,7 @@ class CartController extends Controller
         if (isset($cart[$productId])) {
             $newQty = $cart[$productId] + $quantity;
             if ($newQty > $product->stock) {
-                return back()->with('error', 'Số lượng tồn kho không đủ.');
+return back()->with('error', 'Insufficient stock.');
             }
             $cart[$productId] = $newQty;
         } else {
@@ -67,7 +67,7 @@ class CartController extends Controller
 
         Session::put('giohang', $cart);
 
-        return back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng.');
+        return back()->with('success', 'Product added to cart. <a href="' . route('cart.index') . '" class="fw-bold">View cart</a>');
     }
 
     public function update(Request $request)
@@ -83,14 +83,14 @@ class CartController extends Controller
         $product = Product::where('id', $productId)->where('status', 1)->firstOrFail();
 
         if ($quantity > $product->stock) {
-            return back()->with('error', 'Số lượng tồn kho không đủ.');
+            return back()->with('error', 'Insufficient stock.');
         }
 
         $cart = Session::get('giohang', []);
         $cart[$productId] = $quantity;
         Session::put('giohang', $cart);
 
-        return back()->with('success', 'Đã cập nhật giỏ hàng.');
+        return back()->with('success', 'Cart updated.');
     }
 
     public function remove($productId)
@@ -102,7 +102,7 @@ class CartController extends Controller
             Session::put('giohang', $cart);
         }
 
-        return back()->with('success', 'Đã xóa sản phẩm khỏi giỏ hàng.');
+        return back()->with('success', 'Product removed from cart.');
     }
 
     public function clear()
@@ -111,6 +111,6 @@ class CartController extends Controller
         Session::forget('coupon_code');
         Session::forget('coupon_discount');
 
-        return back()->with('success', 'Đã xóa toàn bộ giỏ hàng.');
+        return back()->with('success', 'Cart cleared.');
     }
 }

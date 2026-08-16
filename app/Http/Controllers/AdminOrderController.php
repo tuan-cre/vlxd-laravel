@@ -122,6 +122,6 @@ class AdminOrderController extends Controller
         });
 
         return redirect()->route('admin.orders.show', $order->id)
-            ->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+            ->with('success', 'Order status updated successfully.');
     }
 }

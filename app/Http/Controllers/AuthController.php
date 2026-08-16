@@ -16,6 +16,11 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    public function showRegisterForm()
+    {
+        return view('auth.register');
+    }
+
     public function login(LoginRequest $request)
     {
         $user = DB::table('users')
@@ -26,7 +31,7 @@ class AuthController extends Controller
 
         if (!$user) {
             return back()->withErrors([
-                'email' => 'Email hoặc mật khẩu không đúng.',
+                'email' => 'Invalid email or password.',
             ])->onlyInput('email');
         }
 

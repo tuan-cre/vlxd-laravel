@@ -33,3 +33,8 @@ Thumbs.db
 /config_extra
 /DoAnWeb
 /tools
+
+# Source images (copies are in public/images/products/)
+/*.jpg
+/*.webp
+/*.png

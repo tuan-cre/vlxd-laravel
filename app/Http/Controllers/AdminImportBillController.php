@@ -60,7 +60,7 @@ class AdminImportBillController extends Controller
 
         DB::transaction(function () use ($request) {
             $nguoidung = session('nguoidung');
-            $userId = $nguoidung ? $nguoidung->id : null;
+            $userId = $nguoidung ? $nguoidung['id'] : null;
 
             $totalMoney = 0;
             foreach ($request->details as $detail) {
@@ -73,7 +73,7 @@ class AdminImportBillController extends Controller
                 'import_date' => $request->import_date,
                 'total_money' => $totalMoney,
                 'note' => $request->note,
-                'status' => 0,
+                'status' => 'pending',
                 'warehouse_id' => $request->warehouse_id,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -93,7 +93,7 @@ class AdminImportBillController extends Controller
         });
 
         return redirect()->route('admin.imports.index')
-            ->with('success', 'Tạo phiếu nhập thành công.');
+            ->with('success', 'Import bill created successfully.');
     }
 
     public function show($id)
@@ -112,8 +112,8 @@ class AdminImportBillController extends Controller
     {
         $importBill = ImportBill::with('details')->findOrFail($id);
 
-        if ($importBill->status == 1) {
-            return back()->with('error', 'Phiếu nhập đã được duyệt.');
+        if ($importBill->status == 'completed') {
+            return back()->with('error', 'Import bill already approved.');
         }
 
         DB::transaction(function () use ($importBill) {
@@ -135,10 +135,10 @@ class AdminImportBillController extends Controller
                 }
             }
 
-            ImportBill::where('id', $importBill->id)->update(['status' => 1]);
+            ImportBill::where('id', $importBill->id)->update(['status' => 'completed']);
         });
 
         return redirect()->route('admin.imports.show', $importBill->id)
-            ->with('success', 'Duyệt phiếu nhập thành công.');
+            ->with('success', 'Import bill approved successfully.');
     }
 }

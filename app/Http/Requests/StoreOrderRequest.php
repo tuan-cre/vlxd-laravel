@@ -25,15 +25,15 @@ class StoreOrderRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'fullname.required' => 'Họ tên là bắt buộc.',
-            'fullname.string' => 'Họ tên phải là chuỗi ký tự.',
-            'phone_number.required' => 'Số điện thoại là bắt buộc.',
-            'phone_number.string' => 'Số điện thoại phải là chuỗi ký tự.',
-            'address.required' => 'Địa chỉ là bắt buộc.',
-            'address.string' => 'Địa chỉ phải là chuỗi ký tự.',
-            'note.string' => 'Ghi chú phải là chuỗi ký tự.',
-            'payment_method.required' => 'Phương thức thanh toán là bắt buộc.',
-            'payment_method.in' => 'Phương thức thanh toán không hợp lệ. Chọn: COD hoặc bank_transfer.',
+            'fullname.required' => 'Full name is required.',
+            'fullname.string' => 'Full name must be a string.',
+            'phone_number.required' => 'Phone number is required.',
+            'phone_number.string' => 'Phone number must be a string.',
+            'address.required' => 'Address is required.',
+            'address.string' => 'Address must be a string.',
+            'note.string' => 'Note must be a string.',
+            'payment_method.required' => 'Payment method is required.',
+            'payment_method.in' => 'Payment method is invalid. Accepted values: COD or bank_transfer.',
         ];
     }
 }

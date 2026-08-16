@@ -11,7 +11,7 @@ class AdminBrandController extends Controller
 {
     public function index()
     {
-        $brands = Brand::withCount('products')->latest()->paginate(15);
+        $brands = Brand::withCount('products')->latest('id')->paginate(15);
 
         return view('admin.brands.index', compact('brands'));
     }
@@ -49,7 +49,7 @@ class AdminBrandController extends Controller
         ]);
 
         return redirect()->route('admin.brands.index')
-            ->with('success', 'Tạo thương hiệu thành công.');
+            ->with('success', 'Brand created successfully.');
     }
 
     public function edit($id)
@@ -92,7 +92,7 @@ class AdminBrandController extends Controller
         $brand->update($data);
 
         return redirect()->route('admin.brands.index')
-            ->with('success', 'Cập nhật thương hiệu thành công.');
+            ->with('success', 'Brand updated successfully.');
     }
 
     public function destroy($id)
@@ -100,7 +100,7 @@ class AdminBrandController extends Controller
         $brand = Brand::findOrFail($id);
 
         if ($brand->products()->count() > 0) {
-            return back()->with('error', 'Không thể xóa thương hiệu có sản phẩm.');
+            return back()->with('error', 'Cannot delete brand with existing products.');
         }
 
         if ($brand->logo && File::exists(public_path($brand->logo))) {
@@ -110,6 +110,6 @@ class AdminBrandController extends Controller
         $brand->delete();
 
         return redirect()->route('admin.brands.index')
-            ->with('success', 'Xóa thương hiệu thành công.');
+            ->with('success', 'Brand deleted successfully.');
     }
 }

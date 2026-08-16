@@ -11,6 +11,16 @@ use Illuminate\Support\Str;
 
 class AdminNewsController extends Controller
 {
+    public function publicIndex()
+    {
+        $news = News::with('author')
+            ->where('status', 'published')
+            ->orderByDesc('created_at')
+            ->paginate(9);
+
+        return view('news.index', compact('news'));
+    }
+
     public function index(Request $request)
     {
         $query = News::with('author');
@@ -50,7 +60,7 @@ class AdminNewsController extends Controller
         }
 
         $nguoidung = session('nguoidung');
-        $authorId = $nguoidung ? $nguoidung->id : null;
+        $authorId = $nguoidung ? $nguoidung['id'] : null;
 
         $status = $request->status === 'published' ? 1 : 0;
 
@@ -67,7 +77,7 @@ class AdminNewsController extends Controller
         ]);
 
         return redirect()->route('admin.news.index')
-            ->with('success', 'Tạo tin tức thành công.');
+            ->with('success', 'News article created successfully.');
     }
 
     public function edit($id)
@@ -107,7 +117,7 @@ class AdminNewsController extends Controller
         $news->update($data);
 
         return redirect()->route('admin.news.index')
-            ->with('success', 'Cập nhật tin tức thành công.');
+            ->with('success', 'News article updated successfully.');
     }
 
     public function destroy($id)
@@ -121,6 +131,6 @@ class AdminNewsController extends Controller
         $news->delete();
 
         return redirect()->route('admin.news.index')
-            ->with('success', 'Xóa tin tức thành công.');
+            ->with('success', 'News article deleted successfully.');
     }
 }
